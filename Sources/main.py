@@ -11,8 +11,8 @@ def main(input_movies):
     print(final_result)
 
     # csv파일을 읽어온다
-    movies_df = pd.read_csv('./movie_dataset/movies_metadata.csv')
-    ratings_df = pd.read_csv('./movie_dataset/ratings_small.csv')
+    movies_df = pd.read_csv('C:/Users/user/Desktop/현승/23_1학기_학교/C 및 PY\PY_프로젝트/PY202309-P/Sources/movie_dataset/movies_metadata.csv')
+    ratings_df = pd.read_csv('C:/Users/user/Desktop/현승/23_1학기_학교/C 및 PY\PY_프로젝트/PY202309-P/Sources/movie_dataset/ratings_small.csv')
 
     # Drop the trash(error) data
     movies_df = drop_trash_data(movies_df)
