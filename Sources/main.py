@@ -2,17 +2,21 @@ import pandas as pd
 import warnings; warnings.simplefilter('ignore')
 from movie_recommender import *
 from data_reader import *
+import numpy as np
+
 
 
 
 def main(input_movies):
+    print("마음에 들었던 영화를 입력하세요: ")
+    #input_movies = input()
     final_result = ""
-    final_result += "Selected movies (5 movies) : " + ",".join(input_movies) + "\n\n"
+    final_result += "Selected movies (5 movies) : " + ",".join(input_movies) + "\n"
     print(final_result)
 
     # csv파일을 읽어온다
-    movies_df = pd.read_csv('C:/Users/user/Desktop/현승/23_1학기_학교/C 및 PY\PY_프로젝트/PY202309-P/Sources/movie_dataset/movies_metadata.csv')
-    ratings_df = pd.read_csv('C:/Users/user/Desktop/현승/23_1학기_학교/C 및 PY\PY_프로젝트/PY202309-P/Sources/movie_dataset/ratings_small.csv')
+    movies_df = pd.read_csv('C:/Users/user/Desktop/현승/23_1학기_학교/C 및 PY/PY_프로젝트/PY202309-P/Sources/movie_dataset/movies_metadata.csv')
+    ratings_df = pd.read_csv('C:/Users/user/Desktop/현승/23_1학기_학교/C 및 PY/PY_프로젝트/PY202309-P/Sources/movie_dataset/ratings_small.csv')
 
     # Drop the trash(error) data
     movies_df = drop_trash_data(movies_df)
@@ -21,12 +25,10 @@ def main(input_movies):
     apriori_result = do_apriori(input_movies, movies_df, ratings_df)
     kmeans_result = do_kmeans(apriori_result, input_movies, movies_df)
 
+    # Add results to final_result
+    final_result += "\nApriori recommendations:\n" + ", ".join(apriori_result) + "\n"
+    final_result += "\nK-means recommendations:\n" + ", ".join(kmeans_result) + "\n"
 
-    # 추가해야될 부분
-    # kmeans_result를 문자열로 변환
-    # 영화 목록을 쉼표로 구분
-    # 저장
-    
     # 결과를 result.txt파일로 출력해줌
     print(final_result)
     f = open("result.txt", "w")
@@ -39,6 +41,6 @@ def main(input_movies):
 
 
 if __name__ == '__main__':
-    #미구현 대체 : input_movies를 임시로 지정
-    input_movies = ['Toy Story', 'Jumanji', 'Grumpier Old Men', 'Waiting to Exhale', 'Father of the Bride Part II']
+    #input_movies를 임시로 지정
+    input_movies = ['Toy Story', 'Jumanji', 'Grumpier Old Men', 'Transformers', 'Batman Forever']
     main(input_movies)

@@ -1,0 +1,7 @@
+Selected movies (5 movies) : Toy Story,Jumanji,Grumpier Old Men,Transformers,Batman Forever
+
+Apriori recommendations:
+
+
+K-means recommendations:
+
