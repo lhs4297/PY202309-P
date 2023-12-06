@@ -36,7 +36,6 @@ def apriori_encoding(r):
 
 def do_apriori(_input_movies, _movies_df, _ratings_df):
     try:
-
         # Internal variables
         _apriori_result = []
 
@@ -48,6 +47,12 @@ def do_apriori(_input_movies, _movies_df, _ratings_df):
         df = pd.merge(_ratings_df, _movies_df[['id', 'title']], left_on='movieId', right_on='id')
         df.drop(['timestamp', 'id'], axis=1, inplace=True)
 
+        # Check if df is empty
+        print(f"df shape: {df.shape}")
+        if df.empty:
+            print("df is empty")
+            return _apriori_result
+
         """ Prepare Apriori
             row : userId | col : movies """
         df = df.drop_duplicates(['userId', 'title'])
@@ -56,13 +61,31 @@ def do_apriori(_input_movies, _movies_df, _ratings_df):
         df_pivot = df_pivot.applymap(apriori_encoding).astype(bool)
         # print(df_pivot.head())
 
+        # Check if df_pivot is empty
+        print(f"df_pivot shape: {df_pivot.shape}")
+        if df_pivot.empty:
+            print("df_pivot is empty")
+            return _apriori_result
+
         """ A-priori Algorithm """
         #calculate support and eradicate under min_support
         frequent_items = apriori(df_pivot, min_support=0.07, use_colnames=True)
         # print(frequent_items.head())
 
+        # Check if frequent_items is empty
+        print(f"frequent_items shape: {frequent_items.shape}")
+        if frequent_items.empty:
+            print("frequent_items is empty")
+            return _apriori_result
+
         # using association rules, compute the other parameter ex) confidence, lift ..
         association_indicator = association_rules(frequent_items, metric="lift", min_threshold=1)
+
+        # Check if association_indicator is empty
+        print(f"association_indicator shape: {association_indicator.shape}")
+        if association_indicator.empty:
+            print("association_indicator is empty")
+            return _apriori_result
 
         # sort by order of lift
         df_lift = association_indicator.sort_values(by=['lift'], ascending=False)
@@ -72,7 +95,7 @@ def do_apriori(_input_movies, _movies_df, _ratings_df):
         for selected_movie in _input_movies:
             num = 0
             df_selected = df_lift[df_lift['antecedents'].apply(lambda x: len(x) == 1 and next(iter(x)) == selected_movie)]
-            df_selected = df_selected[df_selected['lift'] > 1.2]
+            df_selected = df_selected[df_selected['lift'] > 1.0]
             recommended_movies = df_selected['consequents'].values
 
             for movie in recommended_movies:
@@ -80,11 +103,12 @@ def do_apriori(_input_movies, _movies_df, _ratings_df):
                     if title not in _apriori_result and num < 10:
                         _apriori_result.append(title)
                         num += 1
+
     except Exception as e:
         print(f"Error in do_apriori: {e}")
-        
 
     return _apriori_result
+
 
 
 def do_kmeans(_apriori_result, _input_movies, _movies_df):
