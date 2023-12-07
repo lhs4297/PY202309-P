@@ -8,6 +8,8 @@ from sklearn.cluster import KMeans
 from sklearn import preprocessing
 from mlxtend.frequent_patterns import apriori, association_rules
 
+from itertools import combinations
+
 
 
 
@@ -32,7 +34,34 @@ def apriori_encoding(r):
         return 0
     elif r >= 1:
         return 1
-    
+
+# def user_based_collaborative_filtering(_input_movies, _movies_df, _ratings_df):
+#     try:
+#         _recommendations = []
+
+#         # Create a user-movie matrix where each row represents a user and the columns represent movies.
+#         user_movie_matrix = _ratings_df.pivot(index='userId', columns='title', values='rating').fillna(0)
+
+#         # Calculate the cosine similarity between each pair of users.
+#         user_similarity = cosine_similarity(user_movie_matrix)
+#         user_similarity_df = pd.DataFrame(user_similarity, index=user_movie_matrix.index, columns=user_movie_matrix.index)
+
+#         # For each input movie, find users who have rated this movie.
+#         for movie in _input_movies:
+#             if movie in user_movie_matrix.columns:
+#                 similar_users = user_similarity_df[user_movie_matrix[movie] > 0].index.tolist()
+
+#                 # For each similar user, find the movies they have rated highly and recommend them.
+#                 for user in similar_users:
+#                     recommended_movies = user_movie_matrix.loc[user][user_movie_matrix.loc[user] > 4].index.tolist()
+#                     for recommended_movie in recommended_movies:
+#                         if recommended_movie not in _input_movies and recommended_movie not in _recommendations:
+#                             _recommendations.append(recommended_movie)
+
+#     except Exception as e:
+#         print(f"Error in user_based_collaborative_filtering: {e}")
+
+#     return _recommendations
 
 def do_apriori(_input_movies, _movies_df, _ratings_df):
     try:
@@ -70,7 +99,7 @@ def do_apriori(_input_movies, _movies_df, _ratings_df):
         """ A-priori Algorithm """
         #calculate support and eradicate under min_support
         frequent_items = apriori(df_pivot, min_support=0.07, use_colnames=True)
-        # print(frequent_items.head())
+        print(frequent_items.head())
 
         # Check if frequent_items is empty
         print(f"frequent_items shape: {frequent_items.shape}")
@@ -92,17 +121,25 @@ def do_apriori(_input_movies, _movies_df, _ratings_df):
         # print(df_res.head())
 
         """ Start recommendation """
-        for selected_movie in _input_movies:
-            num = 0
-            df_selected = df_lift[df_lift['antecedents'].apply(lambda x: len(x) == 1 and next(iter(x)) == selected_movie)]
-            df_selected = df_selected[df_selected['lift'] > 1.0]
-            recommended_movies = df_selected['consequents'].values
+        for r in range(len(_input_movies), 0, -1):
+            for selected_movies in combinations(_input_movies, r):
+                df_selected = df_lift[df_lift['antecedents'].apply(lambda x: set(x) == set(selected_movies))]
+                df_selected = df_selected[df_selected['lift'] > 1.0]
+                df_selected.sort_values(by='lift', ascending=False, inplace=True)  # Sort by lift in descending order
 
-            for movie in recommended_movies:
-                for title in movie:
-                    if title not in _apriori_result and num < 10:
-                        _apriori_result.append(title)
-                        num += 1
+                recommended_movies = df_selected['consequents'].values
+
+                for movie in recommended_movies:
+                    for title in movie:
+                        if title not in _input_movies and title not in _apriori_result:
+                            _apriori_result.append(title)
+                            if len(_apriori_result) == 5:  # Stop when 5 movies are recommended
+                                break
+
+                if len(_apriori_result) == 5:
+                    break
+            if len(_apriori_result) == 5:
+                break
 
     except Exception as e:
         print(f"Error in do_apriori: {e}")

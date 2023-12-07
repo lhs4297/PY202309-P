@@ -1,6 +1,7 @@
-Selected movies (5 movies) : Toy Story,Jumanji,Grumpier Old Men,Waiting to Exhale,Father of the Bride Part II
+Selected movies (5 movies) : Toy Story,Jumanji,Grumpier Old Men,Transformers,Batman Forever
 
-A-priori & K-means clustering recommend movie : 
+Apriori recommendations:
 
-Collaborative filtering recommend movie : The Adventures of Priscilla, Queen of the Desert,Roula,Star Trek: Generations,Batman Forever,Red Rock West,Muriel's Wedding,Rising Sun,An Awfully Big Adventure,Wyatt Earp,House Party 3,Frankie Starlight,Romper Stomper,A Pyromaniac's Love Story,No Escape,Stargate
+
+K-means recommendations:
 
