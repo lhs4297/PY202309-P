@@ -29,6 +29,13 @@ def main(input_movies):
     final_result += "\nApriori recommendations:\n" + ", ".join(apriori_result) + "\n"
     final_result += "\nK-means recommendations:\n" + ", ".join(kmeans_result) + "\n"
 
+    # 예상 평점 계산
+    user_history_df = ratings_df[ratings_df['userId'] == 1]  # 사용자 ID를 지정합니다.
+    for movie in kmeans_result:
+        movie_info = movies_df[movies_df['title'] == movie]
+        predicted_rating = predict_user_rating(user_history_df, movie_info, movies_df)
+        final_result += f"\nThe predicted rating for {movie} is {predicted_rating[0]}\n"
+
     # 결과를 result.txt파일로 출력해줌
     print(final_result)
     f = open("result.txt", "w")
@@ -36,6 +43,7 @@ def main(input_movies):
     f.close()
 
     return final_result
+
 
 
 
