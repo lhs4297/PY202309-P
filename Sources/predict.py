@@ -1,4 +1,12 @@
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.preprocessing import LabelEncoder
+from movie_recommender import *
+
+# 데이터 전처리
+def prepare_movie_features(movies_df):
+    movies_df['genre'] = LabelEncoder().fit_transform(movies_df['genre'])
+    movies_df['director'] = LabelEncoder().fit_transform(movies_df['director'])
+    return movies_df[['genre', 'director']]
 
 def predict_user_rating(user_history_df, movie):
 
@@ -10,3 +18,4 @@ def predict_user_rating(user_history_df, movie):
     # 평점 예측
     predicted_rating = model.predict([movie])
     return predicted_rating
+
