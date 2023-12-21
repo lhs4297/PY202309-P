@@ -2,6 +2,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import LabelEncoder
 from movie_recommender import *
 #from data_reader import *
+import pandas
 
 # 데이터 전처리
 def prepare_movie_features(movies_df):
@@ -20,6 +21,9 @@ def predict_user_rating(user_history_df, movie):
     model = RandomForestRegressor()
     model.fit(user_history_df.drop('rating', axis=1), user_history_df['rating'])
 
+    movie_features = prepare_movie_features(pd.DataFrame([movie]))
+    predicted_rating = model.predict(movie_features)
+    return predicted_rating
 
     # 평점 예측
     predicted_rating = model.predict([movie])
