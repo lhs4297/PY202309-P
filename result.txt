@@ -1,7 +1,7 @@
-Selected movies (5 movies) : Toy Story,Jumanji,Grumpier Old Men,Transformers,Batman Forever
+Selected movies (5 movies) : Toy Story,Jumanji,Grumpier Old Men,48 Hrs.,Batman Forever
 
 Apriori recommendations:
-
+The Hours, Terminator 3: Rise of the Machines, Back to the Future Part II, Rain Man, Cockles and Muscles, Sissi, The Conversation, Bang, Boom, Bang, Monsoon Wedding, Romeo + Juliet, The Science of Sleep, Three Colors: Red, Solaris, Reservoir Dogs, The Million Dollar Hotel, A Nightmare on Elm Street, Titanic, Grill Point, Tough Enough, Batman Returns, Live and Let Die, To Kill a Mockingbird, Dave Chappelle's Block Party, Syriana, Big Fish, Lost in Translation, The Passion of Joan of Arc, Silent Hill, Psycho, Ocean's Eleven, Once Were Warriors, Beauty and the Beast, Men in Black II, A Clockwork Orange, Wag the Dog, Jurassic Park, The 39 Steps, All the Way Boys, Rope, Say Anything..., Young and Innocent, 5 Card Stud
 
 K-means recommendations:
-
+Terminator 3: Rise of the Machines, Back to the Future Part II, The Million Dollar Hotel, Titanic, Batman Returns, Live and Let Die, Dave Chappelle's Block Party, Syriana, Big Fish, Silent Hill, Ocean's Eleven, Beauty and the Beast, Men in Black II, Jurassic Park, All the Way Boys

@@ -3,6 +3,7 @@ import warnings; warnings.simplefilter('ignore')
 from movie_recommender import *
 from data_reader import *
 import numpy as np
+from predict import *
 
 
 
@@ -24,19 +25,29 @@ def main(input_movies):
     # a-priori & k-means를 이용해서 추천을 해준다
     apriori_result = do_apriori(input_movies, movies_df, ratings_df)
     kmeans_result = do_kmeans(apriori_result, input_movies, movies_df)
+    print("apriori_result:", apriori_result)
 
     # Add results to final_result
     final_result += "\nApriori recommendations:\n" + ", ".join(apriori_result) + "\n"
     final_result += "\nK-means recommendations:\n" + ", ".join(kmeans_result) + "\n"
 
-    # 예상 평점 계산
-    user_history_df = ratings_df[ratings_df['userId'] == 1]  # 사용자 ID를 지정합니다.
-    for movie in kmeans_result:
-        movie_info = movies_df[movies_df['title'] == movie]
-        predicted_rating = predict_user_rating(user_history_df, movie_info, movies_df)
-        final_result += f"\nThe predicted rating for {movie} is {predicted_rating[0]}\n"
+    # # 예상 평점 계산
+    # user_history_df = ratings_df[ratings_df['userId'] == 1]  # 사용자 ID를 지정합니다.
 
-    # 결과를 result.txt파일로 출력해줌
+    # # kmeans_result의 첫 번째 요소 출력
+    # print('First element of kmeans_result:', kmeans_result[0])
+
+    # for movie in kmeans_result:
+    #     movie_info = movies_df[movies_df['title'] == movie]
+
+    #     # movie_info의 타입과 내용 출력
+    #     print('Type of movie_info:', type(movie_info))
+    #     print('Content of movie_info:', movie_info)
+
+    #     predicted_rating = predict_user_rating(user_history_df, movie_info)
+    #     final_result += f"\nThe predicted rating for {movie} is {predicted_rating[0]}\n"
+
+    # 결과를 result.txt파일로 출력해줌.
     print(final_result)
     f = open("result.txt", "w")
     f.write(final_result)
@@ -50,5 +61,5 @@ def main(input_movies):
 
 if __name__ == '__main__':
     #input_movies를 임시로 지정
-    input_movies = ['Toy Story', 'Jumanji', 'Grumpier Old Men', 'Transformers', 'Batman Forever']
+    input_movies = ['Toy Story', 'Jumanji', 'Grumpier Old Men', '48 Hrs.', 'Batman Forever']
     main(input_movies)

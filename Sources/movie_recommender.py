@@ -13,55 +13,12 @@ from itertools import combinations
 
 
 
-# class MovieRecommender:
-#     def __init__(self):
-#         self.data = None
-#         self.trainset = None
-#         self.algo = KNNBasic()
-
-#     def train(self):
-#         self.trainset = self.data.build_full_trainset()
-#         self.algo.fit(self.trainset)
-
-#     def load_data(self, movies_path, ratings_path):
-#         # pandas를 이용해 csv 파일 읽어오기
-#         movies = pd.read_csv(movies_path)
-#         ratings = pd.read_csv(ratings_path)
-
-
 def apriori_encoding(r):
     if r <= 0:
         return 0
     elif r >= 1:
         return 1
 
-# def user_based_collaborative_filtering(_input_movies, _movies_df, _ratings_df):
-#     try:
-#         _recommendations = []
-
-#         # Create a user-movie matrix where each row represents a user and the columns represent movies.
-#         user_movie_matrix = _ratings_df.pivot(index='userId', columns='title', values='rating').fillna(0)
-
-#         # Calculate the cosine similarity between each pair of users.
-#         user_similarity = cosine_similarity(user_movie_matrix)
-#         user_similarity_df = pd.DataFrame(user_similarity, index=user_movie_matrix.index, columns=user_movie_matrix.index)
-
-#         # For each input movie, find users who have rated this movie.
-#         for movie in _input_movies:
-#             if movie in user_movie_matrix.columns:
-#                 similar_users = user_similarity_df[user_movie_matrix[movie] > 0].index.tolist()
-
-#                 # For each similar user, find the movies they have rated highly and recommend them.
-#                 for user in similar_users:
-#                     recommended_movies = user_movie_matrix.loc[user][user_movie_matrix.loc[user] > 4].index.tolist()
-#                     for recommended_movie in recommended_movies:
-#                         if recommended_movie not in _input_movies and recommended_movie not in _recommendations:
-#                             _recommendations.append(recommended_movie)
-
-#     except Exception as e:
-#         print(f"Error in user_based_collaborative_filtering: {e}")
-
-#     return _recommendations
 
 def do_apriori(_input_movies, _movies_df, _ratings_df):
     try:
@@ -98,7 +55,7 @@ def do_apriori(_input_movies, _movies_df, _ratings_df):
 
         """ A-priori Algorithm """
         #calculate support and eradicate under min_support
-        frequent_items = apriori(df_pivot, min_support=0.07, use_colnames=True)
+        frequent_items = apriori(df_pivot, min_support=0.1, use_colnames=True)
         print(frequent_items.head())
 
         # Check if frequent_items is empty
@@ -124,7 +81,7 @@ def do_apriori(_input_movies, _movies_df, _ratings_df):
         for r in range(len(_input_movies), 0, -1):
             for selected_movies in combinations(_input_movies, r):
                 df_selected = df_lift[df_lift['antecedents'].apply(lambda x: set(x) == set(selected_movies))]
-                df_selected = df_selected[df_selected['lift'] > 1.0]
+                df_selected = df_selected[df_selected['lift'] > 1]
                 df_selected.sort_values(by='lift', ascending=False, inplace=True)  # Sort by lift in descending order
 
                 recommended_movies = df_selected['consequents'].values
